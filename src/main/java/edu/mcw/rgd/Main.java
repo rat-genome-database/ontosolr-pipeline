@@ -126,7 +126,7 @@ public class Main {
         emptySynonymList.add("");
 
         // unsorted lines with output
-        String [] inputFiles = {"data/ont_unsorted.tsv"};
+        String [] inputFiles = {"data/onto_solr.tsv.unsorted"};
         final BufferedWriter out = Utils.openWriter(inputFiles[0]);
 
         terms.parallelStream().forEach( t -> {
@@ -185,7 +185,7 @@ public class Main {
         out.close();
         log.info("  unsorted file generated");
 
-        String sortedFileName = "data/ont_sorted_tsv";
+        String sortedFileName = "data/onto_solr.tsv.sorted";
 
         final boolean skipDuplicates = true;
         FileExternalSort.mergeAndSortFiles(inputFiles, sortedFileName, skipDuplicates);
