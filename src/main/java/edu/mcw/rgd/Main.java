@@ -149,10 +149,6 @@ public class Main {
                     buf.append(acc).append("; ").append(termName);
                 }
                 String anc = buf.toString();
-                // if empty, the original query emitted '(null)'
-                if( anc.isEmpty() ) {
-                    anc = "(null)";
-                }
 
                 // generate output for all synonyms
                 List<String> synonyms = synonymMap.get(t.getAccId());
@@ -167,10 +163,10 @@ public class Main {
                     StringBuilder line = new StringBuilder();
                     line.append(t.getAccId())
                             .append("\t").append(t.getOntologyId())
-                            .append("\t").append(t.getTerm())
-                            .append("\t").append(t.getDefinition())
-                            .append("\t").append(anc)
-                            .append("\t").append(sanitizedSynonymName)
+                            .append("\t").append(Utils.NVL(t.getTerm(), "(null)"))
+                            .append("\t").append(Utils.NVL(t.getDefinition(), "(null)"))
+                            .append("\t").append(Utils.NVL(anc, "(null)"))
+                            .append("\t").append(Utils.NVL(sanitizedSynonymName, "(null)"))
                             .append("\n");
 
                     synchronized(out) {
