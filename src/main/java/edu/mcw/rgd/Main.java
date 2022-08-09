@@ -149,6 +149,10 @@ public class Main {
                     buf.append(acc).append("; ").append(termName);
                 }
                 String anc = buf.toString();
+                // if empty, the original query emitted '(null)'
+                if( anc.isEmpty() ) {
+                    anc = "(null)";
+                }
 
                 // generate output for all synonyms
                 List<String> synonyms = synonymMap.get(t.getAccId());
