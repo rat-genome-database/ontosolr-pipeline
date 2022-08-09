@@ -28,6 +28,8 @@ public class Main {
     private String version;
     private Dao dao = new Dao();
 
+    public static final String NULL = "(null)";
+
     Logger log = LogManager.getLogger("status");
 
     long time0 = System.currentTimeMillis();
@@ -90,9 +92,11 @@ public class Main {
                     }
 
                     String val = rs.getString(col+1);
-                    if( val!=null ) {
+                    if( !Utils.isStringEmpty(val) ) {
                         val = val.replace("[\\t\\r\\n]", " ");
                         out.write(val);
+                    } else {
+                        out.write(NULL);
                     }
                 }
                 out.write("\n");
@@ -163,10 +167,10 @@ public class Main {
                     StringBuilder line = new StringBuilder();
                     line.append(t.getAccId())
                             .append("\t").append(t.getOntologyId())
-                            .append("\t").append(Utils.NVL(t.getTerm(), "(null)"))
-                            .append("\t").append(Utils.NVL(t.getDefinition(), "(null)"))
-                            .append("\t").append(Utils.NVL(anc, "(null)"))
-                            .append("\t").append(Utils.NVL(sanitizedSynonymName, "(null)"))
+                            .append("\t").append(NVL(t.getTerm()))
+                            .append("\t").append(NVL(t.getDefinition()))
+                            .append("\t").append(NVL(anc))
+                            .append("\t").append(NVL(sanitizedSynonymName))
                             .append("\n");
 
                     synchronized(out) {
@@ -242,6 +246,13 @@ public class Main {
         }
 
         return synonymMap;
+    }
+
+    String NVL(String s) {
+        if( Utils.isStringEmpty(s) ) {
+            return NULL;
+        }
+        return s;
     }
 
     public void setVersion(String version) {
