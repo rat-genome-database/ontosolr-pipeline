@@ -1,1 +1,1 @@
-# ontosolr-pipeline
+OntoSolr pipeline
