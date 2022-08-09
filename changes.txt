@@ -1,2 +1,3 @@
 Aug 09, 2022
   runSql module: to execute an sql and store results in tab separated format
+  ontology extract created due to problems with porting the original sql to new Oracle version
