@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # OntoSolr pipeline
-# --run_sql 'file_with_sql_statement' 'file_with_results_in_tsv_format'
+# export ontology terms for all active ontologies in RGD into a file in TSV format
 #
 . /etc/profile
 APPNAME="ontosolr-pipeline"
@@ -13,6 +13,6 @@ cd $APPDIR
 
 java -Dspring.config=$APPDIR/properties/default_db2.xml \
     -Dlog4j.configurationFile=file://$APPDIR/properties/log4j2.xml \
-    -jar lib/$APPNAME.jar --run_sql "$@"
+    -jar lib/$APPNAME.jar --export_ontology_terms "$@"
 
 
