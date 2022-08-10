@@ -31,11 +31,21 @@ sed 's/HP/XP/g' $ONTODATA/HP_solr.tsv > $ONTODATA/XP_solr.tsv
 
 echo "--EXPORTING HP to RDO mappings"
 $APPHOME/run_sql.sh $APPHOME/sql/HP_and_RDO_mapped.sql $ONTODATA/HP_and_RDO_mapped.tsv
-awk -F '\t' '{print "\<query\>id:(\"" $1 "\")\</query\>"}' $ONTODATA/HP_and_RDO_mapped.tsv |sed 's/HP/XP/g' > del_redundant_XP_tmp.xml
-echo '<delete>' > del_redundant_XP.xml
-cat del_redundant_XP_tmp.xml >> del_redundant_XP.xml
-echo '</delete>' >> del_redundant_XP.xml
+awk -F '\t' '{print "\<query\>id:(\"" $1 "\")\</query\>"}' $ONTODATA/HP_and_RDO_mapped.tsv |sed 's/HP/XP/g' > $ONTODATA/del_redundant_XP_tmp.xml
+echo '<delete>' > $ONTODATA/del_redundant_XP.xml
+cat $ONTODATA/del_redundant_XP_tmp.xml >> $ONTODATA/del_redundant_XP.xml
+echo '</delete>' >> $ONTODATA/del_redundant_XP.xml
 
 
 echo "--CONVERT .tsv to .xml"
 $APPHOME/convert_tsv.sh
+
+
+echo "--SOLR INDEXING"
+$APPHOME/index_terms.sh
+if [ $? -ne 0 ]; then
+  echo "ERROR: solr indexing failed!"
+  exit 1
+fi
+
+# call here update_all_servers.sh or update_servers_except_prod.sh

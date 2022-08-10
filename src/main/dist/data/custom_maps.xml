@@ -1,0 +1,28 @@
+<add>
+<doc>
+<field name="id">organism_term_s</field>
+<field name="cat">CUSTOM</field>
+<field name="term">Organisms</field>
+</doc>
+<doc>
+<field name="id">mt_term_s</field>
+<field name="cat">CUSTOM</field>
+<field name="term">Mutations</field>
+</doc>
+<doc>
+<field name="id">rdo_id</field>
+<field name="cat">CUSTOM</field>
+<field name="term">Diseases</field>
+</doc>
+<doc>
+<field name="id">gene_s</field>
+<field name="cat">CUSTOM</field>
+<field name="term">Genes</field>
+</doc>
+<doc>
+<field name="id">p_year</field>
+<field name="cat">CUSTOM</field>
+<field name="term">Year</field>
+</doc>
+</add>
+

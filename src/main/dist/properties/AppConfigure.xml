@@ -2,6 +2,6 @@
 
 <beans>
     <bean id="manager" class="edu.mcw.rgd.Main">
-        <property name="version" value="OntoSolr pipeline  -- build Aug 09, 2022" />
+        <property name="version" value="OntoSolr pipeline  -- build Aug 10, 2022" />
     </bean>
 </beans>
