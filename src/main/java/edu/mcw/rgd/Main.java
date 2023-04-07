@@ -18,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author mtutaj
@@ -213,13 +214,29 @@ public class Main {
 
         List<Term> terms = new ArrayList<>();
 
+        Map<String, AtomicInteger> termsExcluded = new HashMap<>();
+
         List<Ontology> ontologies = dao.getPublicOntologies();
         for( Ontology o: ontologies ) {
             terms.addAll( dao.getOntologyTerms(o.getId()));
+            termsExcluded.put(o.getId(), new AtomicInteger());
         }
+
 
         // sanitize term names and definitions
         terms.parallelStream().forEach( t -> {
+
+            // exclude multi ontology terms, like 'EFO:GO:0000001'
+            int colonPos = t.getAccId().indexOf(':');
+            if( colonPos>0 ) {
+                String accNr = t.getAccId().substring(colonPos+1);
+                if( !accNr.matches("\\d+") ) {
+                    //log.debug("  excluded term "+t.getAccId());
+                    AtomicInteger count = termsExcluded.get(t.getOntologyId());
+                    count.incrementAndGet();
+                    return;
+                }
+            }
 
             if( t.getTerm()!=null ) {
                 String sanitizedTermName = t.getTerm().replace("[\\t\\r\\n]", " ");
@@ -231,6 +248,13 @@ public class Main {
                 t.setDefinition(sanitizedDef);
             }
         });
+
+        for( Map.Entry<String, AtomicInteger> entry: termsExcluded.entrySet() ) {
+            AtomicInteger count = entry.getValue();
+            if( count.get() != 0 ) {
+                log.info("  terms excluded for ontology " + entry.getKey()+":  "+count.get());
+            }
+        }
         return terms;
     }
 

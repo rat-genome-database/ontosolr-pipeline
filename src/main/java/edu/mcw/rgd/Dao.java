@@ -11,15 +11,12 @@ public class Dao {
 
     private OntologyXDAO odao = new OntologyXDAO();
 
-    private List<String> excludedPublicOntologies;
-
     public String getConnectionInfo() {
         return odao.getConnectionInfo();
     }
 
     public List<Ontology> getPublicOntologies() throws Exception {
         List<Ontology> ontologies = odao.getPublicOntologies();
-        ontologies.removeIf(o -> getExcludedPublicOntologies().contains(o.getId()));
         return ontologies;
     }
 
@@ -50,13 +47,5 @@ public class Dao {
         List<String> accIds = odao.getAllActiveTermAncestorAccIds(termAcc);
         Collections.sort(accIds);
         return accIds;
-    }
-
-    public List<String> getExcludedPublicOntologies() {
-        return excludedPublicOntologies;
-    }
-
-    public void setExcludedPublicOntologies(List<String> excludedPublicOntologies) {
-        this.excludedPublicOntologies = excludedPublicOntologies;
     }
 }

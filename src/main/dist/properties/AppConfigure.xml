@@ -7,10 +7,5 @@
     </bean>
 
     <bean id="dao" class="edu.mcw.rgd.Dao">
-        <property name="excludedPublicOntologies" >
-            <list>
-                <value>EFO</value>
-            </list>
-        </property>
     </bean>
 </beans>

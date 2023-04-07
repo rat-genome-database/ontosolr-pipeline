@@ -1,7 +1,7 @@
 Apr 07, 2023
   updated build.gradle to be gradle 6.x + compatible
-  now some public ontologies could be excluded from processing, like EFO
-  
+  exclude multi ontology terms, like 'EFO:GO:0000003' from processing -- these terms break solr loading pipeline
+
 Aug 10, 2022
   added scripts to create solr index
 
