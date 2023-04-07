@@ -11,19 +11,16 @@ public class Dao {
 
     private OntologyXDAO odao = new OntologyXDAO();
 
+    private List<String> excludedPublicOntologies;
+
     public String getConnectionInfo() {
         return odao.getConnectionInfo();
     }
 
     public List<Ontology> getPublicOntologies() throws Exception {
-        if( true ) {
-            return odao.getPublicOntologies();
-        }
-        else {
-            List<Ontology> ontologies = new ArrayList<>();
-            ontologies.add(odao.getOntology("MMO"));
-            return ontologies;
-        }
+        List<Ontology> ontologies = odao.getPublicOntologies();
+        ontologies.removeIf(o -> getExcludedPublicOntologies().contains(o.getId()));
+        return ontologies;
     }
 
     public List<Term> getOntologyTerms(String ontId) throws Exception {
@@ -55,45 +52,11 @@ public class Dao {
         return accIds;
     }
 
+    public List<String> getExcludedPublicOntologies() {
+        return excludedPublicOntologies;
+    }
 
-    public Object getOntologyTerms2() {
-
-        // original sql query that we try to replace
-
-        String sql = "select t.term_acc,t.ONT_ID,\n" +
-                "t.term as term, t.TERM_DEFINITION as def,\n" +
-                "(\n" +
-
-                // ORIGINAL phrase -- WM_CONCAT discontinued by Oracle
-                "/* select wm_concat(unique concat(' ', concat(o1.term_acc, concat('; ', o1.term)))) */\n" +
-                "\n" +
-
-                // attempt to rewrite SQL by using LISTAGG
-                // worked great for small ontologies,
-                // but it had limit of 4,000 characters and it was failing for larger ontologies
-                "/* select LISTAGG(unique concat(' ', concat(o1.term_acc, concat('; ', o1.term))),',')\n" +
-                "  within group( order by o1.term_acc) */\n" +
-                "  \n" +
-
-                // attempt to go around 4000 limit of LISTAGG
-                // unfortunately, it was producing duplicate entries ...
-                "select rtrim(xmlagg(xmlelement(e,o1.term_acc||'; '||o1.term,', ').extract('//text()')\n" +
-                "                order by o1.term_acc).getclobval(),', ')\n" +
-
-                "  from ont_dag, ont_terms o1\n" +
-                "where o1.ont_id not in('EFO','CVCL') and ont_id='MMO'\n" +
-                "and o1.term_acc = ont_dag.parent_term_acc\n" +
-                "start with child_term_acc=t.term_acc\n" +
-                "connect by prior parent_term_acc=child_term_acc\n" +
-                ") as anc,\n" +
-                "synonyms\n" +
-                "from ont_terms t\n" +
-                "left join\n" +
-                "(select term_acc as acc, synonym_name as synonyms\n" +
-                "from ont_synonyms where ont_synonyms.SYNONYM_TYPE in ('narrow_synonym', 'related_synonym','broad_synonym', 'synonym', 'exact_synonym')) s\n" +
-                "on t.TERM_ACC = s.acc\n" +
-                "where t.IS_OBSOLETE = 0 and  t.ont_id not in('EFO','CVCL') and ont_id='MMO'\n" +
-                "order by t.term_acc";
-        return sql;
+    public void setExcludedPublicOntologies(List<String> excludedPublicOntologies) {
+        this.excludedPublicOntologies = excludedPublicOntologies;
     }
 }

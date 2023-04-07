@@ -2,6 +2,15 @@
 
 <beans>
     <bean id="manager" class="edu.mcw.rgd.Main">
-        <property name="version" value="OntoSolr pipeline  -- build Aug 10, 2022" />
+        <property name="version" value="OntoSolr pipeline  -- build Apr 07, 2023" />
+        <property name="dao" ref="dao" />
+    </bean>
+
+    <bean id="dao" class="edu.mcw.rgd.Dao">
+        <property name="excludedPublicOntologies" >
+            <list>
+                <value>EFO</value>
+            </list>
+        </property>
     </bean>
 </beans>

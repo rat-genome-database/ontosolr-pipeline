@@ -26,7 +26,7 @@ import java.util.*;
 public class Main {
 
     private String version;
-    private Dao dao = new Dao();
+    private Dao dao;
 
     public static final String NULL = "(null)";
 
@@ -261,6 +261,14 @@ public class Main {
 
     public String getVersion() {
         return version;
+    }
+
+    public Dao getDao() {
+        return dao;
+    }
+
+    public void setDao(Dao dao) {
+        this.dao = dao;
     }
 }
 
