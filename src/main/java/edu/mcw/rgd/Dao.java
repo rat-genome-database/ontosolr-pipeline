@@ -17,6 +17,7 @@ public class Dao {
 
     public List<Ontology> getPublicOntologies() throws Exception {
         List<Ontology> ontologies = odao.getPublicOntologies();
+        ontologies.removeIf( o -> o.getId().equals("EFO") );
         return ontologies;
     }
 

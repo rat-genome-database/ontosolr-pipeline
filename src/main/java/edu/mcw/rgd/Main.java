@@ -226,18 +226,6 @@ public class Main {
         // sanitize term names and definitions
         terms.parallelStream().forEach( t -> {
 
-            // exclude multi ontology terms, like 'EFO:GO:0000001'
-            int colonPos = t.getAccId().indexOf(':');
-            if( colonPos>0 ) {
-                String accNr = t.getAccId().substring(colonPos+1);
-                if( !accNr.matches("\\d+") ) {
-                    //log.debug("  excluded term "+t.getAccId());
-                    AtomicInteger count = termsExcluded.get(t.getOntologyId());
-                    count.incrementAndGet();
-                    return;
-                }
-            }
-
             if( t.getTerm()!=null ) {
                 String sanitizedTermName = t.getTerm().replace("[\\t\\r\\n]", " ");
                 t.setTerm(sanitizedTermName);
