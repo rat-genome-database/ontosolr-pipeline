@@ -144,14 +144,18 @@ public class Main {
                 for( String acc: ancestorAccs ) {
 
                     Term term = termMap.get(acc);
-                    String termName = Utils.defaultString(term.getTerm());
-                    // sanitize term name
-                    termName = termName.replace("[\\t\\r\\n;,:]", " ");
+                    if( term!=null ) {
+                        String termName = Utils.defaultString(term.getTerm());
+                        // sanitize term name
+                        termName = termName.replace("[\\t\\r\\n;,:]", " ");
 
-                    if( buf.length()>0 ) {
-                        buf.append(", ");
+                        if (buf.length() > 0) {
+                            buf.append(", ");
+                        }
+                        buf.append(acc).append("; ").append(termName);
+                    } else {
+                        log.warn("   *** unexpected: no term for acc "+acc);
                     }
-                    buf.append(acc).append("; ").append(termName);
                 }
                 String anc = buf.toString();
 

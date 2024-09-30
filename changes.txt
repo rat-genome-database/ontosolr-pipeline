@@ -1,3 +1,6 @@
+Sep 30, 2024
+  added extra checks to avoid NullPointerException
+
 Apr 07, 2023
   updated build.gradle to be gradle 6.x + compatible
   exclude EFO ontology from processing

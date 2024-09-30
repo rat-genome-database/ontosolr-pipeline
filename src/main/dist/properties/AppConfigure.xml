@@ -2,7 +2,7 @@
 
 <beans>
     <bean id="manager" class="edu.mcw.rgd.Main">
-        <property name="version" value="OntoSolr pipeline  -- build Apr 07, 2023" />
+        <property name="version" value="OntoSolr pipeline  -- build Sep 30, 2024" />
         <property name="dao" ref="dao" />
     </bean>
 
